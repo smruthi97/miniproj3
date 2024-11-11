@@ -1,0 +1,302 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Courier Bookings</title>
+    <link rel="stylesheet" href="{% static 'your_css_file.css' %}"> <!-- Link your CSS file -->
+    <link rel="icon" href="{% static 'assets/img/favicons/favicon.ico' %}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'assets/img/favicons/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'assets/img/favicons/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'assets/img/favicons/favicon-16x16.png' %}">
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/img/favicons/favicon.ico' %}">
+    <link rel="manifest" href="{% static 'assets/img/favicons/manifest.json' %}">
+    <link href="{% static 'assets/css/theme.css' %}" rel="stylesheet" />
+    <meta name="msapplication-TileImage" content="{% static 'assets/img/favicons/mstile-150x150.png' %}">
+    <meta name="theme-color" content="#ffffff">
+    <style>
+        body {
+            font-family: Arial, sans-serif; /* Set a clean font for the body */
+            background-color: #f8f9fa; /* Light background color */
+            margin: 0; /* Remove default margin */
+            padding: 20px; /* Add padding around the body */
+        }
+        
+        h1 {
+            text-align: center; /* Center align main heading */
+            margin-bottom: 20px; /* Add margin below */
+            color: orange; /* Color for the heading */
+        }
+
+        table {
+            width: 100%; /* Full width for the table */
+            border-collapse: collapse; /* Remove gaps between cells */
+            margin: 20px 0; /* Margin above and below the table */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow effect */
+            background-color: #fff; /* White background for the table */
+            border-radius: 8px; /* Rounded corners */
+            overflow: hidden; /* Ensure rounded corners are applied */
+        }
+        
+        th, td {
+            padding: 12px; /* Add padding inside cells */
+            text-align: left; /* Left align text */
+            border-bottom: 1px solid #ddd; /* Light border between rows */
+        }
+        
+        th {
+            background-color: orange; /* Header color */
+            color: white; /* White text for headers */
+            font-weight: bold; /* Bold headers */
+        }
+        
+        tr:hover {
+            background-color: #f1f1f1; /* Light gray on hover */
+        }
+
+        p {
+            text-align: center; /* Center align no bookings message */
+            font-size: 1.2em; /* Slightly larger font size */
+            color: #666; /* Gray color */
+        }
+        
+        button {
+            background-color: orange; /* Button color */
+            color: white; /* Button text color */
+            border: none; /* No border */
+            padding: 10px 20px; /* Padding for the button */
+            border-radius: 5px; /* Rounded corners */
+            cursor: pointer; /* Pointer cursor on hover */
+        }
+
+        button:hover {
+            background-color: darkorange; /* Darker color on hover */
+        }
+        .main {
+            padding: 20px; /* Adjust padding as needed */
+            margin-top: 100px; /* Add top margin to move it down */
+            
+           
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Optional: Shadow for depth */
+        }
+        /* Style for disabled buttons */
+        /* Style for 'Out for Delivery' button */
+        .btn-out-for-delivery {
+            background-color: orange;  /* Orange color for 'Out for Delivery' */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-out-for-delivery:hover {
+            background-color: darkorange;  /* Darken color on hover */
+        }
+
+        /* Style for the 'Not in Correct Location' button */
+        .btn-not-in-location {
+            background-color: gray;  /* Gray color for not in the correct location */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: not-allowed;
+        }
+
+        /* Style for the 'Delivered' button (disabled) */
+        .disabled-btn {
+            background-color: green;  /* Green color for 'Delivered' */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: not-allowed;
+        }
+
+        /* Style for the 'Pickup Pending' button */
+        .btn-pickup-pending {
+            background-color: #ddd;  /* Light gray for pending pickup */
+            color: #666;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: not-allowed;
+        }
+
+        button:disabled {
+            opacity: 0.6;  /* Slight transparency to indicate disabled state */
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3">
+        <div class="container">
+            <a class="navbar-brand" href="index.html"><img src="{% static 'assets/img/gallery/logo.png' %}" height="45" alt="logo"></a>
+            <div class="collapse navbar-collapse">
+                
+                <ul class="navbar-nav ms-auto">
+
+                    <li class="nav-item"><a class="nav-link">Staff Name: {{ staff_name }}</a></li>
+                   <p> <li class="nav-item"><a class="nav-link"><span id="staff-location">Staff Location: {{ staff_location }}</span></a></li></p>
+                   <li class="nav-item"><a class="nav-link" href="{% url 'staff_home' %}">STAFF HOME</a></li>
+                   <li class="nav-item"><a class="nav-link" href="{% url 'logout1' %}">LOGOUT</a></li>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+    <main class="main">
+        <h1>All Courier Deliveries</h1>
+        {% if bookings %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tracking ID</th>
+                        <th>Receiver Name</th>
+                        <th>Destination City</th>
+                        <th>Pickup Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for booking in bookings %}
+                        <tr>
+                            <td>{{ booking.tracking_id }}</td>
+                            <td>{{ booking.receiver_name }}</td>
+                            <td>{{ booking.destination_city }}</td>
+                            <td>{{ booking.picked_status|yesno:"Picked,Not Picked" }}</td>
+                            <td>
+                                {% if booking.picked_status == True %}
+                                    {% if booking.delivery_status == "Out for Delivery" %}
+                                        {% if staff_location == booking.destination_city %}
+                                            <!-- Button is enabled since staff is at the correct location -->
+                                            <button 
+                                                id="deliver-button-{{ booking.tracking_id }}" 
+                                                onclick="handleDeliverClick('{{ booking.tracking_id }}', '{{ staff_name }}')">
+                                                Mark as Delivered
+                                            </button>
+                                        {% else %}
+                                            <!-- Button is disabled because staff is not at the correct location -->
+                                            <button disabled>Not in Correct Location</button>
+                                        {% endif %}
+                                    {% elif booking.delivery_status == "Delivered" %}
+                                        <!-- Display that the item has already been delivered -->
+                                        <button class="disabled-btn" disabled>
+                                            Delivered by {{ booking.delivered_by }}
+                                        </button>
+                                    {% else %}
+                                        <!-- Allow staff to mark as 'Out for Delivery' if not already done -->
+                                        <button 
+                                            id="out-for-delivery-button-{{ booking.tracking_id }}" 
+                                            onclick="handleOutForDeliveryClick('{{ booking.tracking_id }}', '{{ staff_name }}', '{{ booking.destination_city }}')">
+                                            Mark Out for Delivery
+                                        </button>
+                                    {% endif %}
+                                {% else %}
+                                    <!-- If pickup is pending, show disabled button -->
+                                    <button disabled>Pickup Pending</button>
+                                {% endif %}
+                                
+                                <a href="{% url 'view_full_details' booking.tracking_id %}">
+                                    <button>View Full Details</button>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No courier deliveries available for pickup.</p>
+        {% endif %}
+    </main>
+    
+    
+    <script>
+        function handleOutForDeliveryClick(trackingId, staffName, destinationCity) {
+            const staffLocation = '{{ staff_location }}'; // Staff location passed from the context
+            const button = document.getElementById('out-for-delivery-button-' + trackingId); // Get the button by ID
+        
+            // Check if the staff's location matches the destination city
+            if (staffLocation === destinationCity) {
+                console.log("Locations match, ready to send request");
+    
+                const data = {
+                    tracking_id: trackingId,
+                    staff_name: staffName,
+                    staff_location: staffLocation,
+                };
+    
+                // Perform AJAX request to mark as 'Out for Delivery'
+                fetch('{% url "mark_out_for_delivery" %}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}', // CSRF token for security
+                    },
+                    body: JSON.stringify(data),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        alert(data.message);
+                        button.style.backgroundColor = 'green';
+                        button.innerText = 'Out for Delivery by ' + staffName;
+                        button.disabled = true;
+                        location.reload(); // Reload the page to reflect the updated status
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while marking as Out for Delivery.');
+                });
+            } else {
+                alert('You are not in the correct location to deliver this courier.');
+            }
+        }
+    
+        function handleDeliverClick(trackingId, staffName) {
+            const staffLocation = '{{ staff_location }}';
+            const button = document.getElementById('deliver-button-' + trackingId);
+    
+            // Prepare data for marking as delivered
+            const data = {
+                tracking_id: trackingId,
+                staff_name: staffName,
+                staff_location: staffLocation,
+            };
+    
+            // Perform AJAX request to mark as 'Delivered'
+            fetch('{% url "mark_as_delivered" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'true') {
+                    alert(data.message);
+                    button.style.backgroundColor = 'blue'; // Change color to indicate delivered
+                    button.innerText = 'Delivered by ' + staffName; // Update text with staff name
+                    button.disabled = true; // Disable button after marking as delivered
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while marking as Delivered.');
+            });
+        }
+    </script>
+</body>
+</html>

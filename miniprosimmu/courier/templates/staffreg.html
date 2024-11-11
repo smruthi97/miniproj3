@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Registration</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f5f5f5;
+        }
+        .container {
+            width: 400px;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            text-align: left;
+        }
+        h2 {
+            color: #333333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            width: 130px;
+            font-weight: bold;
+            color: #333333;
+        }
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group input[type="date"],
+        .form-group input[type="file"],
+        .form-group input[type="password"] {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .form-group textarea {
+            width: calc(100% - 130px);
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: vertical;
+        }
+        input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #ff5722;
+            border: none;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        input[type="submit"]:hover {
+            background-color: #e64a19;
+        }
+        .error {
+            color: red;
+            font-size: 12px;
+        }
+        .login-link {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+            color: #ff0000;
+        }
+        .login-link a {
+            color: #ff0000;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+        
+        .error-box {
+            border: 1px solid red;
+            background-color: #ffebeb;
+            color: red;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            text-align: center;
+          }   
+ 
+    </style>
+    <script>
+        function validateForm() {
+            let staffName = document.forms["staffForm"]["staffName"].value;
+            let photo = document.forms["staffForm"]["staffPhoto"].value;
+            let email = document.forms["staffForm"]["email"].value;
+            let phone = document.forms["staffForm"]["phone"].value;
+            let address = document.forms["staffForm"]["address"].value;
+            let location = document.forms["staffForm"]["location"].value;
+
+            if (!staffName || !photo || !email || !phone || !address || !location) {
+                alert("Please fill in all required fields.");
+                return false;
+            }
+
+            if (phone.length !== 10) {
+                document.getElementById("phoneError").innerText = "Phone number must be 10 digits.";
+                return false;
+            }
+            return true;
+        }
+    </script>
+</head>
+<body>
+  
+    <div class="container">
+      {% if message %}
+            <script>
+                alert("{{ message }}");
+            </script>
+        {% endif %}
+        <h2>Staff Registration</h2>
+        <form name="staffForm" onsubmit="return validateForm()" method="post" enctype="multipart/form-data" action="{% url 'register_staff' %}">
+          {% csrf_token %}
+            <div class="form-group">
+                <label for="staff_name">Staff Name *</label>
+                <input type="text" id="staff_name" name="staff_name" required pattern="[A-Za-z\s]+" title="Please enter only letters">
+              </div>
+              
+              <div class="form-group">
+                <label for="staff_photo">Staff Photo *</label>
+                <input type="file" id="staff_photo" name="staff_photo" accept="image/*" required>
+              </div>
+              
+              <div class="form-group">
+                <label for="id_proof">ID Proof *</label>
+                <input type="file" id="id_proof" name="id_proof" accept="image/*" required>
+              </div>
+              
+              <div class="form-group">
+                <label for="dob">Date of Birth *</label>
+                <input type="date" id="dob" name="dob" required>
+                <div id="dobError" class="error-box" style="display: none;">
+                  Not Eligible
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label for="email">Email *</label>
+                <input type="email" id="email" name="email" required>
+              </div>
+              
+              <div class="form-group">
+                <label for="phone">Phone Number *</label>
+                <input type="text" id="phone" name="phone" maxlength="10" required pattern="\d{10}" title="Please enter a valid 10-digit phone number">
+                <div class="error" id="phoneError"></div>
+              </div>
+              
+              <div class="form-group">
+                <label for="address">Address *</label>
+                <textarea id="address" name="address" required rows="3"></textarea>
+              </div>
+              
+              <div class="form-group">
+                <label for="location">Working Location *</label>
+                <select id="location" name="location" required>
+                  <option value="" disabled selected>Select a location</option>
+                  <option value="Thiruvananthapuram">Thiruvananthapuram</option>
+                  <option value="Kollam">Kollam</option>
+                  <option value="Pathanamthitta">Pathanamthitta</option>
+                  <option value="Alappuzha">Alappuzha</option>
+                  <option value="Kottayam">Kottayam</option>
+                  <option value="Idukki">Idukki</option>
+                  <option value="Ernakulam">Ernakulam</option>
+                  <option value="Thrissur">Thrissur</option>
+                  <option value="Palakkad">Palakkad</option>
+                  <option value="Malappuram">Malappuram</option>
+                  <option value="Kozhikode">Kozhikode</option>
+                  <option value="Wayanad">Wayanad</option>
+                  <option value="Kannur">Kannur</option>
+                  <option value="Kasaragod">Kasaragod</option>
+                </select>
+              </div>
+              
+              <div class="form-group">
+                <label for="password">Password *</label>
+                <input type="password" id="password" name="password" required minlength="6" title="Password should be at least 6 characters long">
+              </div>
+              
+              <input type="submit" value="Register">
+              </form>
+              
+              <div class="login-link">
+                Already registered? <a href="/login">Then login</a>
+              </div>
+
+              <script>
+                document.getElementById('dob').addEventListener('change', function () {
+                  const dobInput = this;
+                  const dob = new Date(dobInput.value);
+                  const today = new Date();
+                  const age = today.getFullYear() - dob.getFullYear();
+                  const monthDiff = today.getMonth() - dob.getMonth();
+                  const dayDiff = today.getDate() - dob.getDate();
+                  const isUnderage = age < 18 || (age === 18 && (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)));
+              
+                  const dobError = document.getElementById('dobError');
+                  if (isUnderage) {
+                    dobError.style.display = 'block';
+                    dobInput.setCustomValidity('You must be at least 18 years old to register.');
+                  } else {
+                    dobError.style.display = 'none';
+                    dobInput.setCustomValidity('');
+                  }
+                });
+              </script>
+              
+</body>
+</html>

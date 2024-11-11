@@ -1,0 +1,27 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Details</title>
+</head>
+<body>
+    <div class="back-link-container">
+        <a href="{% url 'pickups' %}" class="back-link">&laquo; Back to pickups</a>
+
+    <h1>Booking Details</h1>
+    <p><strong>Tracking ID:</strong> {{ booking.tracking_id }}</p>
+    <p><strong>Sender Name:</strong> {{ booking.sender_name }}</p>
+    <p><strong>Pickup Address:</strong> {{ booking.pickup_address }}</p>
+    <p><strong>Pickup City:</strong> {{ booking.pickup_city }}</p>
+    <p><strong>Receiver Name:</strong> {{ booking.receiver_name }}</p>
+    <p><strong>Destination Address:</strong> {{ booking.destination_address }}</p>
+    <p><strong>destination_city</strong> {{ booking.destination_city }}</p>
+    <p><strong>Weight:</strong> {{ booking.weight }} kg</p>
+    <p><strong>item_type:</strong> {{ booking.item_type }}</p>
+    <p><strong>Delivery Date:</strong> {{ booking.delivery_date }}</p>
+   
+    <!-- Add other fields as needed -->
+</body>
+</html>

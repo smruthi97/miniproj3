@@ -1,0 +1,119 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Sign In</title>
+    {% comment %} <link rel="stylesheet" href="{% static 'your_css_file.css' %}">  <!-- Link to your CSS file --> {% endcomment %}
+    <style>
+        /* General reset and body styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* Container styling for form card */
+.container {
+    background-color: #fff;
+    padding: 2rem;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    max-width: 400px;
+    width: 100%;
+}
+
+/* Heading styling */
+h1, h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #333;
+}
+
+/* Alert message styling */
+.alert {
+    color: red;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+/* Form styling */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-bottom: 0.5rem;
+    color: #555;
+}
+
+input {
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 100%;
+}
+
+/* Button styling */
+button {
+    padding: 0.75rem;
+    background-color: #ff6a00;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    width: 100%;
+}
+
+button:hover {
+    background-color: #ff5400;
+}
+
+/* Link styling */
+p {
+    text-align: center;
+    color: #666;
+}
+
+a {
+    color: #ff6a00;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Staff Login</h1>
+        
+        {% if error_message %}
+        <div class="error-message">{{ error_message }}</div>
+    {% endif %}
+        
+        <form method="POST">
+            {% csrf_token %}
+            <div>
+                <label for="employee_id">Employee ID:</label>
+                <input type="text" name="employee_id" id="employee_id" required>
+            </div>
+            <div>
+                <label for="code">Code:</label>
+                <input type="text" id="code" name="code" maxlength="4" required><br><br>
+            </div>
+            <button type="submit">Sign In</button>
+        </form>
+    </div>
+</body>
+</html>

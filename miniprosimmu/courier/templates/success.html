@@ -1,0 +1,128 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Receipt</title>
+    <style>
+        .receipt-container {
+            width: 80%;
+            margin: 0 auto;
+            border: 1px solid #ddd;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            border-radius: 8px; /* Add rounded corners */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Add shadow */
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .logo img {
+            max-width: 150px; /* Set the maximum width of the logo */
+            height: auto;
+        }
+        .header, .footer {
+            text-align: center;
+        }
+        .header h1 {
+            color: green;
+            font-size: 1.5em;
+            margin: 0;
+        }
+        .header h2 {
+            margin-top: 5px;
+        }
+        .details, .summary {
+            margin: 20px 0;
+        }
+        .details, .summary {
+            display: flex;
+            justify-content: space-between; /* Align items in the same row */
+            margin-bottom: 10px; /* Space between rows */
+        }
+        .details label, .summary label {
+            font-weight: bold;
+            width: 40%; /* Fixed width for labels */
+        }
+        .details p, .summary p {
+            margin: 0;
+            width: 55%; /* Ensure values take up the rest of the space */
+        }
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .button-container button {
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 4px; /* Rounded button corners */
+            background-color: green; /* Button color */
+            color: white; /* Button text color */
+            cursor: pointer;
+            transition: background-color 0.3s; /* Smooth transition */
+        }
+        .button-container button:hover {
+            background-color: darkgreen; /* Darker shade on hover */
+        }
+    </style>
+</head>
+<body>
+    <div class="receipt-container">
+        <div class="logo">
+            <!-- Logo field; ensure your context provides a logo URL or image path -->
+            <img src="{% static 'assets/img/gallery/logo.png' %}" alt="Company Logo">
+        </div>
+        <div class="header">
+            <h1>Booked Successfully</h1>
+            <h2>Courier Booking Receipt</h2>
+            <p>Thank you for your booking!</p>
+        </div>
+        <div class="details">
+            <label>Tracking ID:</label>
+            <p>{{ booking.tracking_id }}</p>
+        </div>
+        <div class="details">
+            <label>Sender Details:</label>
+            <p>{{ booking.sender_name }}, {{ booking.pickup_address }}, {{ booking.pickup_city }}</p>
+        </div>
+        <div class="details">
+            <label>Receiver Details:</label>
+            <p>{{ booking.receiver_name }}, {{ booking.receiver_phone }}, {{ booking.destination_address }}, {{ booking.destination_city }}</p>
+        </div>
+       
+        <div class="details">
+            <label>Weight:</label>
+            <p>{{ booking.weight }} kg</p>
+        </div>
+        <div class="details">
+            <label>Type:</label>
+            <p>{{ booking.item_type }}</p>
+        </div>
+        <div class="details">
+            <label>Pickup Date:</label>
+            <p>{{ booking.pickup_date }}</p>
+        </div>
+
+        <div class="summary">
+            <label>Amount Paid:</label>
+            <p>${{ booking.price }}</p>
+        </div>
+
+        <div class="summary">
+            <label>Date of Payment:</label>
+            <p>{{ payment_date }}</p>
+        </div>
+
+        <div class="footer">
+            <p>Payment Status: <strong>Paid</strong></p>
+        </div>
+
+        <div class="button-container">
+            <button onclick="window.print()">Print Receipt</button>
+            <button onclick="window.location.href='{% url 'userhome' %}'">Go to Home</button>
+        </div>
+    </div>
+</body>
+</html>

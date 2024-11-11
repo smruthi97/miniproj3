@@ -1,0 +1,233 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Courier</title>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            color: #555;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="number"],
+        input[type="date"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        input[type="file"] {
+            margin-bottom: 15px;
+        }
+        input[type="submit"] {
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+        input[type="submit"]:hover {
+            background-color: #4cae4c;
+        }
+        .error {
+            color: red;
+            margin: 10px 0;
+        }
+    </style><!-- Add your CSS file if needed -->
+    <script>
+        // Function to calculate price based on weight and item type
+        function calculatePrice() {
+            let weight = parseFloat(document.getElementById('weight').value) || 0;
+            let itemType = document.getElementById('item_type').value;
+
+            let basePricePerKg = 10; // Example base price per kilogram
+
+            // Additional charges for different item types
+            let extraCharges = {
+                "Fresh Items": 3,       // Additional charge for fresh items
+                "Breakables": 5,        // Additional charge for fragile items
+                "Health Supplies": 2,   // Additional charge for medical supplies
+                "Everyday Goods": 0     // No extra charge for everyday items
+            };
+            
+            // Calculate price based on item type and weight
+            if (itemType in extraCharges) {
+                price = (weight * basePricePerKg) + extraCharges[itemType];
+            } else {
+                // Default price calculation if itemType is not specified in extraCharges
+                price = weight * basePricePerKg;
+            }
+
+            // Display the calculated price in the price field
+            document.getElementById('price').value = price.toFixed(2);
+        }
+
+        // Attach event listeners for dynamic price calculation
+        window.onload = function() {
+            document.getElementById('weight').addEventListener('input', calculatePrice);
+            document.getElementById('item_type').addEventListener('change', calculatePrice);
+        };
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const pickupDateInput = document.querySelector("input[name='pickup_date']");
+            const dateMessage = document.getElementById("date-message");  // Message element
+            const today = new Date();
+            const minDate = new Date(today);
+            const maxDate = new Date(today);
+        
+            minDate.setDate(today.getDate() + 2); // Minimum 2 days from today
+            maxDate.setDate(today.getDate() + 10); // Maximum 10 days from today
+        
+            // Set min and max attributes for date input to restrict selection
+            pickupDateInput.min = minDate.toISOString().split("T")[0];
+            pickupDateInput.max = maxDate.toISOString().split("T")[0];
+        
+            // Show the message when the user focuses on the date input
+            pickupDateInput.addEventListener("focus", function() {
+                dateMessage.style.display = 'block';  // Show message
+            });
+        
+            // Hide the message when the user leaves the input field (blur)
+            pickupDateInput.addEventListener("blur", function() {
+                dateMessage.style.display = 'none';  // Hide message
+            });
+        
+            // Show error message if the selected date is out of range
+            pickupDateInput.addEventListener("change", function() {
+                const selectedDate = new Date(pickupDateInput.value);
+                if (selectedDate < minDate || selectedDate > maxDate) {
+                    pickupDateInput.value = "";  // Clear the input
+                }
+            });
+        });
+        
+    </script>
+    
+</head>
+<body>
+   
+    <div class="container">
+        <h1>Book a Courier</h1>
+        <form method="POST" action="{% url 'book_courier' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label for="sender_name">Sender Name:</label>
+            <input type="text" name="sender_name" required><br>
+
+            <label for="pickup_address">Sender Address:</label>
+            <textarea name="pickup_address" required></textarea><br>
+
+            <label for="pickup_city">Pickup City:</label>
+            <select name="pickup_city" required>
+                <option value="Alappuzha">Alappuzha</option>
+                <option value="Idukki">Idukki</option>
+                <option value="Ernakulam">Ernakulam</option>
+                <option value="Kottayam">Kottayam</option>
+                <option value="Kozhikode">Kozhikode</option>
+                <option value="Malappuram">Malappuram</option>
+                <option value="Palakkad">Palakkad</option>
+                <option value="Pathanamthitta">Pathanamthitta</option>
+                <option value="Thiruvananthapuram">Thiruvananthapuram</option>
+                <option value="Kollam">Kollam</option>
+                <option value="Kannur">Kannur</option>
+                <option value="Wayanad">Wayanad</option>
+                <option value="Kasargod">Kasargod</option>
+                <option value="Thrissur">Thrissur</option>
+
+                <!-- Add other cities as needed -->
+            </select><br>
+
+            <label for="receiver_name">Receiver Name:</label>
+            <input type="text" name="receiver_name" required><br>
+
+            <label for="receiver_phone">Receiver Phone:</label>
+            <input type="tel" name="receiver_phone" pattern="[0-9]{10}" required><br>
+            <label for="receiver_email">Receiver's Email:</label>
+            <input type="email" id="receiver_email" name="receiver_email" required>
+
+            <label for="destination_address">Receiver Address:</label>
+            <textarea name="destination_address" required></textarea><br>
+
+            <label for="destination_city">Destination City:</label>
+            <select name="destination_city" required>
+                <option value="Alappuzha">Alappuzha</option>
+                <option value="Idukki">Idukki</option>
+                <option value="Ernakulam">Ernakulam</option>
+                <option value="Kottayam">Kottayam</option>
+                <option value="Kozhikode">Kozhikode</option>
+                <option value="Malappuram">Malappuram</option>
+                <option value="Palakkad">Palakkad</option>
+                <option value="Pathanamthitta">Pathanamthitta</option>
+                <option value="Thiruvananthapuram">Thiruvananthapuram</option>
+                <option value="Kollam">Kollam</option>
+                <option value="Kannur">Kannur</option>
+                <option value="Wayanad">Wayanad</option>
+                <option value="Kasargod">Kasargod</option>
+                <option value="Thrissur">Thrissur</option>
+                <!-- Add other cities as needed -->
+            </select><br>
+
+            <label for="destination_pincode">Destination Pincode:</label>
+            <input type="text" name="destination_pincode" pattern="[0-9]{6}" required><br>
+
+            {% comment %} <label for="package_details">Package Details:</label>
+            <textarea name="package_details" required></textarea><br> {% endcomment %}
+
+            <label for="weight">Weight (kg):</label>
+            <input type="number" id="weight" name="weight" step="0.01" required><br>
+
+            <label for="item_type">Item Type:</label>
+            <select id="item_type" name="item_type" required>
+                <option value="Fresh Items">Fresh Items</option>
+                <option value="Breakables">Breakables</option>
+                <option value="Health Supplies">Health Supplies</option>
+                <option value="Everyday Goods">Everyday Goods</option>
+
+            </select><br>
+
+            <p id="pickup-instructions">Please select a pickup date.</p>
+            
+                <label for="pickup_date">Pickup Date:</label>
+                <input type="date" name="pickup_date" id="pickup_date" required><br>
+
+
+            <label for="item_photo">Item Photo:</label>
+            <input type="file" name="item_photo" accept="image/*" required><br>
+
+            <label for="price">Calculated Price:</label>
+            <input type="text" id="price" name="price" readonly><br>
+
+            <input type="submit" value="Book Courier">
+        </form>
+    </div>
+</body>
+</html>

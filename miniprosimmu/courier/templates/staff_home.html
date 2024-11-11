@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Home</title>
+    <!-- Link to your CSS file if needed -->
+    <style>
+      body { font-family: Arial, sans-serif; }
+      .welcome-message { font-size: 15px; color: orange; margin: 12px 0; }
+    </style>
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'assets/img/favicons/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'assets/img/favicons/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'assets/img/favicons/favicon-16x16.png' %}">
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/img/favicons/favicon.ico' %}">
+    <link rel="manifest" href="{% static 'assets/img/favicons/manifest.json' %}">
+    <link href="{% static 'assets/css/theme.css' %}" rel="stylesheet" />
+    <meta name="msapplication-TileImage" content="{% static 'assets/img/favicons/mstile-150x150.png' %}">
+    <meta name="theme-color" content="#ffffff">
+</head>
+<body>
+
+<main class="main" id="top">
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3 d-block" data-navbar-on-scroll="data-navbar-on-scroll">
+        <div class="container"><a class="navbar-brand" href="index.html"><img src="{% static 'assets/img/gallery/logo.png' %}" height="45" alt="logo" /></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"> </span></button>
+            <div class="collapse navbar-collapse border-top border-lg-0 mt-4 mt-lg-0" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto pt-2 pt-lg-0 font-base">
+                    
+                    <li class="nav-item px-2"><a class="nav-link" href="{% url 'pickups' %}">PICKUPS</a></li>
+                    <li class="nav-item px-2"><a class="nav-link" href="{% url 'deliveries' %}">DELIVERIES</a></li>
+                    <li class="nav-item px-2"><a class="nav-link" href="{% url 'logout1' %}">LOGOUT</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="py-xxl-10 pb-0" id="userhome">
+        <div class="bg-holder bg-size" style="background-image:url(assets/img/gallery/hero-header-bg.png);background-position:top center;background-size:cover;"></div>
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-5 col-xl-6 col-xxl-7 order-0 order-md-1 text-end">
+                    <img class="pt-7 pt-md-0 w-100" src="{% static 'assets/img/illustrations/hero.png' %}" alt="hero-header" />
+                </div>
+                <div class="col-md-75 col-xl-6 col-xxl-5 text-md-start text-center py-8">
+                    <h1 class="fw-normal fs-6 fs-xxl-7">Welcome to</h1>
+                    <h1 class="fw-bolder fs-6 fs-xxl-7 mb-2">Staff Home.</h1>
+                    <p class="fs-1 mb-5">We deliver your products safely to <br />your home in a reasonable time.</p>
+
+                    <!-- Display welcome message with staff name and employee ID -->
+                    <h2 class="welcome-message">Welcome, {{ staff_name }}!</h2>
+                    <p>Your Employee ID: {{ employee_id }}</p>
+                    <p>Your Location is: {{ location }}</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+</body>
+</html>
+

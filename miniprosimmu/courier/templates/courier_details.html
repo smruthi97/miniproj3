@@ -1,0 +1,146 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courier Details</title>
+    <link rel="stylesheet" href="{% static 'your_css_file.css' %}"> <!-- Link your CSS file -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'assets/img/favicons/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'assets/img/favicons/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'assets/img/favicons/favicon-16x16.png' %}">
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/img/favicons/favicon.ico' %}">
+    <link rel="manifest" href="{% static 'assets/img/favicons/manifest.json' %}">
+    <link href=" {% static 'assets/css/theme.css' %}" rel="stylesheet" />
+    <meta name="msapplication-TileImage" content="{% static 'assets/img/favicons/mstile-150x150.png' %}">
+    <meta name="theme-color" content="#ffffff">
+    <style>
+        
+        body {
+            font-family: Arial, sans-serif; /* Set a clean font for the body */
+            background-color: #f8f9fa; /* Light background color */
+            margin: 0; /* Remove default margin */
+            padding: 200px; /* Add padding around the body */
+        }
+        
+        h1 {
+            text-align: center; /* Center align main heading */
+            margin-bottom: 20px; /* Add margin below */
+            color: orange; /* Dark color for the heading */
+        }
+        
+        h2 {
+            text-align: center; /* Center align subheading */
+            margin-bottom: 20px; /* Add margin below */
+            color: #666; /* Gray color for the subheading */
+        }
+        
+        table {
+            width: 130%; /* Adjust the width as needed */
+            max-width: 1200px; /* Maximum width to prevent it from becoming too large */
+            border-collapse: collapse; /* Remove gaps between cells */
+            margin: 20px -90px; /* Center the table and add vertical spacing */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow effect */
+            background-color: #fff; /* White background for the table */
+            border-radius: 8px; /* Rounded corners for a softer look */
+            overflow: hidden; /* Ensure rounded corners are applied to the table */
+        }
+        
+        th, td {
+            padding: 12px; /* Add padding inside cells */
+            text-align: left; /* Left align text */
+            border-bottom: 1px solid #ddd; /* Light border between rows */
+        }
+        
+        th {
+            background-color: orange; /* Bootstrap primary color */
+            color: white; /* White text for headers */
+            font-weight: bold; /* Bold headers */
+        }
+        
+        tr:hover {
+            background-color: #f1f1f1; /* Light gray on hover */
+        }
+        
+        tbody tr:nth-child(even) {
+            background-color: #f9f9f9; /* Light gray for even rows */
+        }
+        
+        tbody tr:nth-child(odd) {
+            background-color: #fff; /* White for odd rows */
+        }
+        
+        p {
+            text-align: center; /* Center align no bookings message */
+            font-size: 1.2em; /* Slightly larger font size */
+            color: #666; /* Gray color */
+        }
+        body { font-family: Arial, sans-serif; }
+        .welcome-message { font-size: 15px; color: orange; margin: 12px 0; }
+    </style>
+</head>
+<main class="main" id="top">
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3 d-block" data-navbar-on-scroll="data-navbar-on-scroll">
+      <div class="container"><a class="navbar-brand" href="index.html"><img src="{% static 'assets/img/gallery/logo.png' %}" height="45" alt="logo" /></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"> </span></button>
+<div class="collapse navbar-collapse border-top border-lg-0 mt-4 mt-lg-0" id="navbarSupportedContent">
+    <ul class="navbar-nav ms-auto pt-2 pt-lg-0 font-base">
+      <li class="nav-item px-2"><a class="nav-link" aria-current="page" href="{% url 'userhome' %}">USER HOME</a></li>
+      <li class="nav-item px-2"><a class="nav-link" href="{% url 'logout' %}">LOGOUT</a></li>
+      <li> <!-- Display welcome message -->
+
+        {% if username %}
+            <h1 class="welcome-message">Welcome, {{ username }}!</h1>
+        {% endif %}</li>
+    </ul>
+    
+</nav>
+<body>
+    <h2>Your Courier Bookings</h2>
+{% if bookings %}
+    <table>
+        <thead>
+            <tr>
+                <th>Tracking ID</th>
+                <th>Sender Name</th>
+                <th>Pickup City</th>
+                <th>Receiver Name</th>
+                <th>Destination City</th>
+                <th>Weight</th>
+                <th>Payment Status</th>
+                <th>Amount</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for booking in bookings %}
+            <tr>
+                <td>{{ booking.tracking_id }}</td>
+                <td>{{ booking.sender_name }}</td>
+                <td>{{ booking.pickup_city }}</td>
+                <td>{{ booking.receiver_name }}</td>
+                <td>{{ booking.destination_city }}</td>
+                <td>{{ booking.weight }} kg</td>
+                <td>{{ booking.status }}</td>
+                <td>${{ booking.price }}</td>
+                <td>
+                    {% if booking.delivery_status == "Out for Delivery" %}
+                        <span style="color: green;">Out for Delivery by {{ booking.delivered_by }}</span>
+                    {% elif booking.delivery_status == "Delivered" %}
+                        <span style="color: blue;">Delivered by {{ booking.delivered_by }}</span>
+                    {% elif booking.picked_by %}
+                        Item Picked by Staff: {{ booking.picked_by }}
+                    {% else %}
+                        Not Picked
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>You have no courier bookings.</p>
+{% endif %}
+
+</body>
+</html>
